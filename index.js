@@ -190,7 +190,7 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // Start server
-const server = app.listen(port, '0.0.0.0',() => {
+const server = app.listen(port,() => {
   console.log(`Server running on port ${port}`);
 });
 
