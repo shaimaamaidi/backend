@@ -131,21 +131,27 @@ app.get('/api/users/:id', (req, res) => {
 app.post('/api/users', (req, res) => {
   const { name, email } = req.body;
 
+  // Vérifier si les champs 'name' et 'email' sont fournis
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
+  // Requête SQL pour insérer un utilisateur dans la base de données
   const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
 
+  // Exécuter la requête SQL
   db.query(query, [name, email], (err, result) => {
+    // Si une erreur survient, afficher les détails dans les logs et renvoyer une réponse 500
     if (err) {
-      console.error('Error executing query:', err);
-      return res.status(500).json({ error: 'Database error' });
+      console.error('Error executing query:', err);  // Afficher l'erreur dans les logs
+      return res.status(500).json({ error: 'Database error', details: err });  // Afficher les détails de l'erreur dans la réponse
     }
 
+    // Si l'insertion réussit, renvoyer l'utilisateur inséré
     res.status(201).json({ id: result.insertId, name, email });
   });
 });
+
 
 app.put('/api/users/:id', (req, res) => {
   const userId = req.params.id;
